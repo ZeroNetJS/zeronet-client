@@ -37,7 +37,7 @@
     "msgpack5": "^3.6.0",
     "pull-queue": "^0.1.4",
     "pull-stream": "^3.6.1",
-    "zeronet-client": "file:../zeronet-client"
+    "zeronet-common": "~0.0.4"
   },
   "devDependencies": {
     "aegir": "^12.2.0"

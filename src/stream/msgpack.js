@@ -1,12 +1,12 @@
-//Modified version of https://github.com/alligator-io/pull-msgpack/blob/master/index.js
+// Modified version of https://github.com/alligator-io/pull-msgpack/blob/master/index.js
 
-"use strict"
+'use strict'
 
 const msgpack = require('msgpack5')({
   compatibilityMode: true
 })
-const queue = require("pull-queue")
-const bl = require("bl")
+const queue = require('pull-queue')
+const bl = require('bl')
 
 module.exports.pack = function () {
   var ended = false
@@ -15,10 +15,11 @@ module.exports.pack = function () {
     return function (abort, callback) {
       if (abort) return read(abort, callback)
 
-      if (ended)
+      if (ended) {
         return callback(ended)
+      }
 
-      read(abort, function next(end, c) {
+      read(abort, function next (end, c) {
         if (end) {
           ended = end
           return callback(end)
@@ -37,19 +38,20 @@ module.exports.pack = function () {
 }
 
 module.exports.unpack = function (limit) {
-  //var ended = null
+  // var ended = null
   let chunks = bl()
-  let limited = !!limit
+  let limited = Boolean(limit)
 
   const stream = queue(function (end, buf, cb) {
     if (end) return cb(end)
 
-    if (buf)
+    if (buf) {
       chunks.append(buf)
+    }
 
     let res_ = []
 
-    function d(cb) {
+    function d (cb) {
       try {
         var result = msgpack.decode(chunks)
         cb(null, result)
@@ -59,15 +61,14 @@ module.exports.unpack = function (limit) {
         } else {
           cb(err)
         }
-        return
       }
     }
 
-    function loop() {
+    function loop () {
       if (limited && !limit) return cb(null, res_)
       d((err, res) => {
         if (limited) limit--
-          if (err) return cb(err)
+        if (err) return cb(err)
         if (res) {
           res_.push(res)
           loop()

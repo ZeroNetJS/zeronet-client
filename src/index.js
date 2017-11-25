@@ -1,18 +1,18 @@
-"use strict"
+'use strict'
 
-const msgstream = require("zeronet-client/lib/stream/msgpack")
-const util = require("util")
-const Bridge = require("./stream/bridge")
-const clientDuplex = require("./duplex")
-const EE = require("events").EventEmitter
+const msgstream = require('./stream/msgpack')
+const util = require('util')
+const Bridge = require('./stream/bridge')
+const clientDuplex = require('./duplex')
+const EE = require('events').EventEmitter
 
 const pull = require('pull-stream')
 
-const debug = require("debug")
+const debug = require('debug')
 
-const log = debug("zeronet:protocol:client")
+const log = debug('zeronet:protocol:client')
 
-function Client(conn, protocol, opt) {
+function Client (conn, protocol, opt) {
   const self = this
 
   /* Handling */
@@ -23,10 +23,13 @@ function Client(conn, protocol, opt) {
   conn.client = self
 
   let addrs
-  conn.getObservedAddrs((e, a) => self.addrs = addrs = (opt.isServer ? "=> " : "<= ") + a.map(a => a.toString()).join(", "))
-  log("initializing", addrs)
+  conn.getObservedAddrs((e, a) => {
+    if (e) throw e
+    self.addrs = addrs = (opt.isServer ? '=> ' : '<= ') + a.map(a => a.toString()).join(', ')
+  })
+  log('initializing', addrs)
 
-  function handleIn(data) {
+  function handleIn (data) {
     if (handlers[data.cmd]) handlers[data.cmd].recv(data)
   }
 
@@ -34,18 +37,18 @@ function Client(conn, protocol, opt) {
 
   let cbs = {}
 
-  function addCallback(id, cb) {
+  function addCallback (id, cb) {
     cbs[id] = cb
   }
 
-  function handleResponse(data) {
+  function handleResponse (data) {
     if (cbs[data.to]) {
       cbs[data.to](data)
       delete cbs[data.to]
     }
   }
 
-  self.req_id = 1 //used the first for handshake
+  self.req_id = 1 // used the first for handshake
 
   self.addCallback = addCallback
 
@@ -53,16 +56,17 @@ function Client(conn, protocol, opt) {
 
   const cmd = self.cmd = {}
 
-  for (var name in handlers)
+  for (var name in handlers) {
     cmd[name] = handlers[name].send.bind(handlers[name])
+  }
 
-  function disconnect(e) {
+  function disconnect (e) {
     if (d.ended()) return
     d.end()
-    self.emit("end", e)
+    self.emit('end', e)
     if (e !== true) log(e)
     self.write = () => {
-      throw new Error("Offline")
+      throw new Error('Offline')
     }
     self.cmd = {}
   }
@@ -82,10 +86,9 @@ function Client(conn, protocol, opt) {
     msgstream.pack(),
     s
   )
-
 }
 
 util.inherits(Client, EE)
 
 module.exports = Client
-module.exports.HandshakeClient = require("./handshake")
+module.exports.HandshakeClient = require('./handshake')

@@ -1,22 +1,22 @@
-"use strict"
+'use strict'
 
-const msgstream = require("./stream/msgpack")
-const handshake = require("zeronet-protocol/lib/zero/handshake")
-const util = require("util")
-const Bridge = require("./stream/bridge")
-const bl = require("bl")
-const clientDuplex = require("./duplex")
-const EE = require("events").EventEmitter
+const msgstream = require('./stream/msgpack')
+const handshake = require('zeronet-common/src/handshake')
+const util = require('util')
+const Bridge = require('./stream/bridge')
+const bl = require('bl')
+const clientDuplex = require('./duplex')
+const EE = require('events').EventEmitter
 
 const pull = require('pull-stream')
 
-const debug = require("debug")
+const debug = require('debug')
 
-const log = debug("zeronet:protocol:client:handshake")
+const log = debug('zeronet:protocol:client:handshake')
 
-const Client = require("zeronet-client")
+const Client = require('zeronet-client')
 
-function HandshakeClient(conn, protocol, zeronet, opt) {
+function HandshakeClient (conn, protocol, zeronet, opt) {
   const self = this
 
   /* Handling */
@@ -25,10 +25,13 @@ function HandshakeClient(conn, protocol, zeronet, opt) {
     handshake: handshake(self, protocol, zeronet, opt)
   }
   let addrs
-  conn.getObservedAddrs((e, a) => self.addrs = addrs = (opt.isServer ? "=> " : "<= ") + a.map(a => a.toString()).join(", "))
-  log("initializing", addrs)
+  conn.getObservedAddrs((e, a) => {
+    if (e) throw e
+    self.addrs = addrs = (opt.isServer ? '=> ' : '<= ') + a.map(a => a.toString()).join(', ')
+  })
+  log('initializing', addrs)
 
-  function handleIn(data) {
+  function handleIn (data) {
     if (handlers[data.cmd]) handlers[data.cmd].recv(data)
     disconnect(d.end())
   }
@@ -37,11 +40,11 @@ function HandshakeClient(conn, protocol, zeronet, opt) {
 
   let cbs = {}
 
-  function addCallback(id, cb) {
+  function addCallback (id, cb) {
     cbs[id] = cb
   }
 
-  function handleResponse(data) {
+  function handleResponse (data) {
     if (cbs[data.to]) {
       cbs[data.to](data)
       delete cbs[data.to]
@@ -56,16 +59,17 @@ function HandshakeClient(conn, protocol, zeronet, opt) {
 
   const cmd = self.cmd = {}
 
-  for (var name in handlers)
+  for (var name in handlers) {
     cmd[name] = handlers[name].send.bind(handlers[name])
+  }
 
-  function disconnect(e) {
+  function disconnect (e) {
     if (d.ended()) return
     d.end()
-    self.emit("end", e)
+    self.emit('end', e)
     if (e !== true) log(e)
     self.write = () => {
-      throw new Error("Offline")
+      throw new Error('Offline')
     }
     self.cmd = {}
   }
@@ -90,7 +94,7 @@ function HandshakeClient(conn, protocol, zeronet, opt) {
 
   self.getRaw = cb => {
     d.u.getChunks().pipe(bl((err, data) => {
-      log("appending %s leftover bytes", addrs, data.length)
+      log('appending %s leftover bytes', addrs, data.length)
       if (err) return cb(err)
       cb(null, s.restore([data]))
     }))
@@ -98,13 +102,13 @@ function HandshakeClient(conn, protocol, zeronet, opt) {
 
   /* upgrade */
 
-  function warnNoCrypto() {
-    if (zeronet.zeronet) { //why did we call common "zeronet"???
+  function warnNoCrypto () {
+    if (zeronet.zeronet) { // why did we call common "zeronet"???
       let i = {
-        address: addrs.split(" ")[1],
-        direction: addrs.split(" ")[0] == "=>" ? "to" : "from"
+        address: addrs.split(' ')[1],
+        direction: addrs.split(' ')[0] === '=>' ? 'to' : 'from'
       }
-      zeronet.logger("protocol:handshake").warn(i, "No crypto used in connection %s %s", i.direction, i.address)
+      zeronet.logger('protocol:handshake').warn(i, 'No crypto used in connection %s %s', i.direction, i.address)
     }
   }
 
@@ -121,15 +125,15 @@ function HandshakeClient(conn, protocol, zeronet, opt) {
         }))
       }
       if (handshake.getLibp2p() && handshake.getLibp2p().length) {
-        cb(null, null, handshake.getLibp2p()) //trigger upgrade
-        /*self.getRaw((err, conn) => { //closes the conn
+        cb(null, null, handshake.getLibp2p()) // trigger upgrade
+        /* self.getRaw((err, conn) => { //closes the conn
           if (err) return
           pull(
             pull.values([]),
             conn,
             pull.drain()
           )
-        })*/
+        }) */
       } else {
         if (protocol.crypto && handshake.commonCrypto()) {
           self.getRaw((err, conn) => {
@@ -146,7 +150,6 @@ function HandshakeClient(conn, protocol, zeronet, opt) {
       }
     })
   }
-
 }
 
 util.inherits(HandshakeClient, EE)

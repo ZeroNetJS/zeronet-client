@@ -1,35 +1,36 @@
-"use strict"
+'use strict'
 
-const debug = require("debug")
-const plog = debug("zeronet:protocol:client")
-plog.enabled = !!process.env.DEBUG_PACKETS
-const clone = require("clone")
-const EE = require("events").EventEmitter
+const debug = require('debug')
+const plog = debug('zeronet:protocol:client')
+plog.enabled = Boolean(process.env.DEBUG_PACKETS)
+const clone = require('clone')
+const EE = require('events').EventEmitter
 
-function thingInspect(d /*, n*/ ) {
-  if (Buffer.isBuffer(d)) return "<Buffer length=" + d.length + ">"
+function thingInspect (d /*, n */) {
+  if (Buffer.isBuffer(d)) return '<Buffer length=' + d.length + '>'
   return JSON.stringify(d)
 }
 
-function objectInspect(data, type) {
-  if (!plog.enabled) return "-"
+function objectInspect (data, type) {
+  if (!plog.enabled) return '-'
   let d = clone(data)
   let r = []
   switch (type) {
-  case "resp":
-    delete d.cmd
-    delete d.to
-    break;
-  case "req":
-    d = d.params
-    break;
+    case 'resp':
+      delete d.cmd
+      delete d.to
+      break
+    case 'req':
+      d = d.params
+      break
+    default:
+      throw new Error('Invalid type ' + type)
   }
-  for (var p in d)
-    r.push(p + "=" + thingInspect(d[p], p))
-  return r.join(", ")
+  for (var p in d) { r.push(p + '=' + thingInspect(d[p], p)) }
+  return r.join(', ')
 }
 
-function clientDuplex(addrs, handleIn, handleResponse, disconnect) {
+function clientDuplex (addrs, handleIn, handleResponse, disconnect) {
   /**
     @namespace clientDuplex
     @constructor
@@ -41,16 +42,17 @@ function clientDuplex(addrs, handleIn, handleResponse, disconnect) {
 
   const fnc = {
     sink: function (read) {
-      read(null, function next(end, data) {
-        if (end)
+      read(null, function next (end, data) {
+        if (end) {
           return disconnect(end)
-        if (!data || typeof data != "object" || !data.cmd) return read(null, next)
+        }
+        if (!data || typeof data !== 'object' || !data.cmd) return read(null, next)
         try {
-          if (data.cmd == "response") {
-            plog("got  response", addrs, data.to, objectInspect(data, "resp"))
+          if (data.cmd === 'response') {
+            plog('got  response', addrs, data.to, objectInspect(data, 'resp'))
             handleResponse(data)
           } else {
-            plog("got   request", addrs, data.cmd, objectInspect(data, "req"))
+            plog('got   request', addrs, data.cmd, objectInspect(data, 'req'))
             handleIn(data)
           }
         } catch (e) {
@@ -62,20 +64,20 @@ function clientDuplex(addrs, handleIn, handleResponse, disconnect) {
     source: function (end, cb) {
       if (end) return disconnect(end)
 
-      function doSend() {
+      function doSend () {
         cb(null, q.shift())
       }
       if (q.length) return doSend()
-      else ee.once("data", doSend)
+      else ee.once('data', doSend)
     },
     write: data => {
-      if (data.cmd == "response") {
-        plog("sent response", addrs, data.to, objectInspect(data, "resp"))
+      if (data.cmd === 'response') {
+        plog('sent response', addrs, data.to, objectInspect(data, 'resp'))
       } else {
-        plog("sent  request", addrs, data.cmd, objectInspect(data, "req"))
+        plog('sent  request', addrs, data.cmd, objectInspect(data, 'req'))
       }
       q.push(data)
-      ee.emit("data")
+      ee.emit('data')
     },
     end: e => {
       ended = e || true
