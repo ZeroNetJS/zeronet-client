@@ -1,7 +1,6 @@
 'use strict'
 
 const msgstream = require('./stream/msgpack')
-const handshake = require('zeronet-common/src/handshake')
 const util = require('util')
 const Bridge = require('./stream/bridge')
 const bl = require('bl')
@@ -22,7 +21,7 @@ function HandshakeClient (conn, protocol, zeronet, opt) {
   /* Handling */
 
   const handlers = self.handlers = {
-    handshake: handshake(self, protocol, zeronet, opt)
+    handshake: protocol.handshake(self, protocol, zeronet, opt)
   }
   let addrs
   conn.getObservedAddrs((e, a) => {
