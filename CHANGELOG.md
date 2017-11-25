@@ -1,3 +1,8 @@
+<a name="0.2.1"></a>
+## [0.2.1](https://github.com/ZeroNetJS/zeronet-js/compare/v0.2.0...v0.2.1) (2017-11-25)
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/ZeroNetJS/zeronet-js/compare/v0.1.0...v0.2.0) (2017-11-25)
 
