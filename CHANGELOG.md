@@ -1,3 +1,13 @@
+<a name="0.2.2"></a>
+## [0.2.2](https://github.com/ZeroNetJS/zeronet-js/compare/v0.2.1...v0.2.2) (2017-11-25)
+
+
+### Features
+
+* Use handshake from protocol ([7a95a60](https://github.com/ZeroNetJS/zeronet-js/commit/7a95a60))
+
+
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/ZeroNetJS/zeronet-js/compare/v0.2.0...v0.2.1) (2017-11-25)
 
