@@ -13,7 +13,7 @@
     "release-minor": "aegir release --type minor",
     "release-major": "aegir release --type major",
     "coverage": "aegir coverage",
-    "coverage-publish": "aegir-coverage publish"
+    "coverage-publish": "aegir coverage -u"
   },
   "keywords": [
     "zeronet",
@@ -31,12 +31,12 @@
   },
   "homepage": "https://github.com/ZeroNetJS/zeronet-js#readme",
   "dependencies": {
-    "bl": "^1.2.1",
-    "clone": "^2.1.1",
+    "bl": "~1.2.1",
+    "clone": "~2.1.1",
     "data-queue": "0.0.3",
-    "msgpack5": "^3.6.0",
-    "pull-queue": "^0.1.4",
-    "pull-stream": "^3.6.1"
+    "msgpack5": "~3.6.0",
+    "pull-queue": "~0.1.4",
+    "pull-stream": "~3.6.1"
   },
   "devDependencies": {
     "aegir": "^12.2.0"
