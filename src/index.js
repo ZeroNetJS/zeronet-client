@@ -31,6 +31,7 @@ function Client (conn, protocol, opt) {
 
   function handleIn (data) {
     if (handlers[data.cmd]) handlers[data.cmd].recv(data)
+    else if (handlers._) handlers._.recv(data)
   }
 
   /* Callbacks */

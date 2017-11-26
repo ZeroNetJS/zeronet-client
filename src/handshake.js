@@ -13,7 +13,7 @@ const debug = require('debug')
 
 const log = debug('zeronet:protocol:client:handshake')
 
-const Client = require('zeronet-client')
+const Client = require('.')
 
 function HandshakeClient (conn, protocol, zeronet, opt) {
   const self = this
@@ -32,7 +32,7 @@ function HandshakeClient (conn, protocol, zeronet, opt) {
 
   function handleIn (data) {
     if (handlers[data.cmd]) handlers[data.cmd].recv(data)
-    disconnect(d.end())
+    else disconnect()
   }
 
   /* Callbacks */
