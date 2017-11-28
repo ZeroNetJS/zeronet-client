@@ -32,12 +32,14 @@
   "homepage": "https://github.com/ZeroNetJS/zeronet-client#readme",
   "dependencies": {
     "bl": "~1.2.1",
-    "clone": "~2.1.1",
     "msgpack5": "~3.6.0",
+    "pull-pushable": "~2.1.1",
     "pull-stream": "~3.6.1"
   },
   "devDependencies": {
     "aegir": "^12.2.0",
+    "interface-connection": "^0.3.2",
+    "multiaddr": "^3.0.1",
     "pull-pair": "^1.1.0"
   },
   "directories": {
