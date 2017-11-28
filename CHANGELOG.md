@@ -1,3 +1,13 @@
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/ZeroNetJS/zeronet-client/compare/v0.2.4...v0.3.0) (2017-11-28)
+
+
+### Features
+
+* Example and better README ([2098b38](https://github.com/ZeroNetJS/zeronet-client/commit/2098b38))
+
+
+
 <a name="0.2.4"></a>
 ## [0.2.4](https://github.com/ZeroNetJS/zeronet-client/compare/v0.2.3...v0.2.4) (2017-11-28)
 
