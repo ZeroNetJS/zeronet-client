@@ -23,7 +23,7 @@ const addr = multiaddr('/ip4/127.0.0.1/tcp/1234')
 server.listen(addr)
 
 server.once('listening', () => {
-  const client = Client(TCP.dial())
+  const client = Client(TCP.dial(addr))
 
   client.request('ping', {}, (err, data) => {
     if (err) throw err
