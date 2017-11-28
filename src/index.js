@@ -68,9 +68,10 @@ class ZeroNetClient extends EE {
     return this.req_id++
   }
   request (cmd, params, cb) {
-    const req_id = this.getReqId()
+    if (typeof cb !== 'function') throw new Error('CB not a function')
+    const req_id = this.getReqId() // eslint-disable-line camelcase
     log('[%s/REQUEST]: SEND CMD %s ID %s', this.addr, cmd, req_id)
-    this.queue[req_id] = cb
+    this.queue[req_id] = {cb, cmd}
     this.write({req_id, cmd, params})
   }
   _doResponse (to, err, data) {
@@ -96,28 +97,30 @@ class ZeroNetClient extends EE {
         return read(true)
       }
       if (typeof data !== 'object' || data == null || !data.cmd || typeof data.cmd !== 'string') return errMalformed()
-      if (data.cmd == 'response') { // handle a response
+      if (data.cmd === 'response') { // handle a response
         if (typeof data.to !== 'number') return errMalformed()
         if (this.queue[data.to]) {
           log('[%s/RESPONSE]: GET ID %s SUCCESS %s', this.addr, data.to, !data.error)
+          const {cb, cmd} = this.queue[data.to]
+          delete this.queue[data.to]
           if (data.error) { // if the response has en error create a fancy error
             const err = new Error((data.error.startsWith('Error: ') ? '' : 'Error: ') + data.error)
             err.stack = (data.error.startsWith('Error: ') ? '' : 'Error: ') + data.error +
-              '\n    at PeerCmd(' + name + ')' +
+              '\n    at PeerCmd(' + cmd + ')' +
               '\n    at Peer(' + this.addr + ')' +
               '\n    at ZeroNet Protocol'
-            this.queue[data.to](err)
+            cb(err)
           } else { // handle a normal response (create new data object wihtout 'to' and 'cmd')
             let cleanData = {}
             for (const p in data) {
-              if (p !== 'to' && p !== 'cmd') cleanData[p] = data[p]
+              if (p !== 'to' && p !== 'cmd') cleanData[p] = data[p] // eslint-disable-line max-depth
             }
-            this.queue[data.to](null, cleanData)
+            cb(null, cleanData)
           }
-          delete this.queue[data.to]
         } else return errMalformed('No such request ' + data.to) // if there is no such request this is a protocol error. bye!
       } else { // handle a request
         if (typeof data.req_id !== 'number') return errMalformed()
+        if (typeof data.params !== 'object' || data.params == null) return errMalformed()
         log('[%s/REQUEST]: GET CMD %s ID %s', this.addr, data.cmd, data.req_id)
         if (this.handlers[data.cmd]) { // we have that command
           this.handlers[data.cmd](data.params, this._doResponse.bind(this, data.req_id))
