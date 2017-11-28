@@ -56,7 +56,7 @@ class ZeroNetClient extends EE {
       this.end = true
     }
     for (const id in this.queue) {
-      this.queue[id](reason || new Error('Disconnected during execution'))
+      this.queue[id].cb(reason || new Error('Disconnected during execution'))
     }
     this.queue = null
     this.source.end()
@@ -125,7 +125,7 @@ class ZeroNetClient extends EE {
         if (this.handlers[data.cmd]) { // we have that command
           this.handlers[data.cmd](data.params, this._doResponse.bind(this, data.req_id))
         } else { // we don't have that command.
-          this.write({to: data.req_id, error: 'Invalid command'})
+          this.write({cmd: 'response', to: data.req_id, error: 'Invalid command'})
         }
       }
       read(Boolean(this.end), next)
@@ -153,3 +153,5 @@ module.exports = (conn, handlers, isServer) => {
 
   return client
 }
+
+module.exports.Client = ZeroNetClient

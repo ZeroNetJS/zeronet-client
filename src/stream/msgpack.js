@@ -55,7 +55,7 @@ module.exports.unpack = function () {
             if (err instanceof msgpack.IncompleteBufferError) {
               return []
             } else {
-              return []
+              return [err]
             }
           }
         }
