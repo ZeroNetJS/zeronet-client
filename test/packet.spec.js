@@ -18,9 +18,9 @@ const equal = require('assert').deepEqual
 const Pushable = require('pull-pushable')
 
 describe('packet', () => {
-  const req_packet = {req_id: 1, cmd: 'ping', params: {}}
-  const res_packet = {to: 1, cmd: 'response', body: 'Pong!'}
-  const res_invalid_packet = {to: 1, cmd: 'response', error: 'Invalid command'}
+  const reqPacket = {req_id: 1, cmd: 'ping', params: {}}
+  const resPacket = {to: 1, cmd: 'response', body: 'Pong!'}
+  const resInvalidPacket = {to: 1, cmd: 'response', error: 'Invalid command'}
 
   it('client sends the right request packet', cb => {
     let [client, server] = util.Duplex()
@@ -30,7 +30,7 @@ describe('packet', () => {
       msgpack.unpack(),
       pull.collect((err, res) => {
         expect(err).to.not.exist()
-        equal(res, [req_packet])
+        equal(res, [reqPacket])
         cb()
       })
     )
@@ -52,11 +52,11 @@ describe('packet', () => {
       msgpack.unpack(),
       pull.collect((err, res) => {
         expect(err).to.not.exist()
-        equal(res, [res_packet])
+        equal(res, [resPacket])
         cb()
       })
     )
-    p.push(req_packet)
+    p.push(reqPacket)
     setTimeout(() => server.disconnect(), 10)
   })
 
@@ -71,11 +71,11 @@ describe('packet', () => {
       msgpack.unpack(),
       pull.collect((err, res) => {
         expect(err).to.not.exist()
-        equal(res, [res_invalid_packet])
+        equal(res, [resInvalidPacket])
         cb()
       })
     )
-    p.push(req_packet)
+    p.push(reqPacket)
     setTimeout(() => server.disconnect(), 10)
   })
 })
