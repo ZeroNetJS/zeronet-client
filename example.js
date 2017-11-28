@@ -24,7 +24,6 @@ server.once('listening', () => {
     if (err) throw err
     if (data) console.log('Got ping back: %s', data.body)
 
-    client.disconnect()
     server.close()
   }, true) // isServer
 })
