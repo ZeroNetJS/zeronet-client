@@ -1,3 +1,14 @@
+<a name="0.3.1"></a>
+## [0.3.1](https://github.com/ZeroNetJS/zeronet-client/compare/v0.3.0...v0.3.1) (2017-11-28)
+
+
+### Bug Fixes
+
+* Example ([5745169](https://github.com/ZeroNetJS/zeronet-client/commit/5745169))
+* Minor fixes and more tests ([39fa1ff](https://github.com/ZeroNetJS/zeronet-client/commit/39fa1ff))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/ZeroNetJS/zeronet-client/compare/v0.2.4...v0.3.0) (2017-11-28)
 
