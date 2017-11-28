@@ -33,13 +33,13 @@
   "dependencies": {
     "bl": "~1.2.1",
     "clone": "~2.1.1",
-    "data-queue": "0.0.3",
     "msgpack5": "~3.6.0",
-    "pull-queue": "~0.1.4",
     "pull-stream": "~3.6.1"
   },
   "devDependencies": {
-    "aegir": "^12.2.0"
+    "aegir": "^12.2.0",
+    "pull-pair": "^1.1.0",
+    "zeronet-protocol": "github:ZeroNetJS/zeronet-protocol"
   },
   "directories": {
     "test": "test",

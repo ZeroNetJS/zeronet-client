@@ -5,7 +5,7 @@
 const msgpack = require('msgpack5')({
   compatibilityMode: true
 })
-const queue = require('pull-queue')
+const Pushable = require('pull-pushable')
 const bl = require('bl')
 
 module.exports.pack = function () {
@@ -37,49 +37,43 @@ module.exports.pack = function () {
   }
 }
 
-module.exports.unpack = function (limit) {
-  // var ended = null
+module.exports.unpack = function () {
   let chunks = bl()
-  let limited = Boolean(limit)
+  const push = Pushable()
+  return {
+    source: push,
+    sink: read => {
+      const next = (err, data) => {
+        if (err) return push.end(err)
+        if (data) chunks.append(data)
 
-  const stream = queue(function (end, buf, cb) {
-    if (end) return cb(end)
+        function d () {
+          try {
+            var result = msgpack.decode(chunks)
+            return [null, result]
+          } catch (err) {
+            if (err instanceof msgpack.IncompleteBufferError) {
+              return []
+            } else {
+              return []
+            }
+          }
+        }
 
-    if (buf) {
-      chunks.append(buf)
-    }
-
-    let res_ = []
-
-    function d (cb) {
-      try {
-        var result = msgpack.decode(chunks)
-        cb(null, result)
-      } catch (err) {
-        if (err instanceof msgpack.IncompleteBufferError) {
-          cb()
-        } else {
-          cb(err)
+        while (true) {
+          const [err, res] = d()
+          if (err) {
+            push.end(err)
+            return read(true)
+          }
+          if (res) {
+            push.push(res)
+          } else return read(null, next)
         }
       }
-    }
 
-    function loop () {
-      if (limited && !limit) return cb(null, res_)
-      d((err, res) => {
-        if (limited) limit--
-        if (err) return cb(err)
-        if (res) {
-          res_.push(res)
-          loop()
-        } else return cb(null, res_)
-      })
-    }
-
-    loop()
-  }, {
-    sendMany: true
-  })
-  stream.getChunks = () => chunks
-  return stream
+      read(null, next)
+    },
+    getChunks: () => chunks // allows us to access unconsumed data
+  }
 }
