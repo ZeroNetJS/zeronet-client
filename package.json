@@ -24,12 +24,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ZeroNetJS/zeronet-js.git"
+    "url": "git+https://github.com/ZeroNetJS/zeronet-client.git"
   },
   "bugs": {
-    "url": "https://github.com/ZeroNetJS/zeronet-js/issues"
+    "url": "https://github.com/ZeroNetJS/zeronet-client/issues"
   },
-  "homepage": "https://github.com/ZeroNetJS/zeronet-js#readme",
+  "homepage": "https://github.com/ZeroNetJS/zeronet-client#readme",
   "dependencies": {
     "bl": "~1.2.1",
     "clone": "~2.1.1",
