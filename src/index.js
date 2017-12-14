@@ -12,9 +12,11 @@ const EE = require('events').EventEmitter
   Crash course zeronet protocol:
     request:
       {
-        cmd: command to execute,
-        req_id: an id unique for req/res,
-        params: object containing args for request
+        cmd: "command to execute",
+        req_id: req_id++ // unique for every req/res,
+        params: {
+          // request parameters
+        }
       }
     response:
       {
@@ -62,7 +64,7 @@ class ZeroNetClient extends EE {
     this.queue = {}
     this.req_id = 1
     this.isServer = isServer || false
-    this.addr = '(unknown ' + (isServer ? 'client' : 'server') + ')'
+    this.addr = (isServer ? 'server' : 'client') + '->(unknown ' + (isServer ? 'client' : 'server') + ')'
     log('creating isServer=%s', this.isServer)
   }
 
@@ -168,7 +170,7 @@ module.exports = (conn, handlers, isServer) => {
 
   conn.getObservedAddrs((err, addrs) => {
     if (err) return
-    client.addr = (client.isServer ? 'client' : 'server') + ': ' + addrs.map(a => a.toString()).join(', ')
+    client.addr = (client.isServer ? 'server' : 'client') + '->' + addrs.map(a => a.toString()).join(', ')
   })
 
   pull(
