@@ -1,3 +1,13 @@
+<a name="0.3.3"></a>
+## [0.3.3](https://github.com/ZeroNetJS/zeronet-client/compare/v0.3.2...v0.3.3) (2017-12-14)
+
+
+### Bug Fixes
+
+* Use zeronet-msgpack to fix ZeroNetJS/zeronet-js[#39](https://github.com/ZeroNetJS/zeronet-client/issues/39) ([ee3d090](https://github.com/ZeroNetJS/zeronet-client/commit/ee3d090))
+
+
+
 <a name="0.3.2"></a>
 ## [0.3.2](https://github.com/ZeroNetJS/zeronet-client/compare/v0.3.1...v0.3.2) (2017-12-13)
 
