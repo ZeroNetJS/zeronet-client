@@ -32,7 +32,7 @@
   "homepage": "https://github.com/ZeroNetJS/zeronet-client#readme",
   "dependencies": {
     "bl": "~1.2.1",
-    "msgpack5": "~3.6.0",
+    "zeronet-msgpack": "~3.6.0",
     "pull-pushable": "~2.1.1",
     "pull-stream": "~3.6.1"
   },

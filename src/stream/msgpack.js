@@ -2,7 +2,7 @@
 
 'use strict'
 
-const msgpack = require('msgpack5')({
+const msgpack = require('zeronet-msgpack')({
   compatibilityMode: true
 })
 const Pushable = require('pull-pushable')
