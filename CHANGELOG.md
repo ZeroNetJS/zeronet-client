@@ -1,3 +1,13 @@
+<a name="0.3.5"></a>
+## [0.3.5](https://github.com/ZeroNetJS/zeronet-client/compare/v0.3.4...v0.3.5) (2017-12-27)
+
+
+### Features
+
+* Expose getObservedAddrs ([e4565f1](https://github.com/ZeroNetJS/zeronet-client/commit/e4565f1))
+
+
+
 <a name="0.3.4"></a>
 ## [0.3.4](https://github.com/ZeroNetJS/zeronet-client/compare/v0.3.3...v0.3.4) (2017-12-14)
 
