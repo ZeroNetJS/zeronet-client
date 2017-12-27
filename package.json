@@ -37,7 +37,7 @@
     "pull-stream": "^3.6.1"
   },
   "devDependencies": {
-    "aegir": "^12.2.0",
+    "aegir": "^12.3.0",
     "chai": "^4.1.2",
     "dirty-chai": "^2.0.1",
     "interface-connection": "^0.3.2",
