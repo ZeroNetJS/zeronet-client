@@ -167,6 +167,7 @@ class ZeroNetClient extends EE {
 
 module.exports = (conn, handlers, isServer) => {
   const client = new ZeroNetClient(handlers, isServer)
+  client.getObservedAddrs = conn.getObservedAddrs.bind(conn)
 
   conn.getObservedAddrs((err, addrs) => {
     if (err) return
