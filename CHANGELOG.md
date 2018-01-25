@@ -1,3 +1,8 @@
+<a name="0.3.6"></a>
+## [0.3.6](https://github.com/ZeroNetJS/zeronet-client/compare/v0.3.5...v0.3.6) (2018-01-25)
+
+
+
 <a name="0.3.5"></a>
 ## [0.3.5](https://github.com/ZeroNetJS/zeronet-client/compare/v0.3.4...v0.3.5) (2017-12-27)
 
