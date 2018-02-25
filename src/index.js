@@ -119,11 +119,10 @@ class ZeroNetClient extends EE {
     }
   }
   // streamFile
-  streamFileRequest() {
+  streamFileRequest () {
     let queue = []
     this.push = data => queue.push(data)
   }
-
 
   // handler
   sink (read) {
