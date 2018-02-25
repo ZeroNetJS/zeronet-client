@@ -64,6 +64,7 @@ class ZeroNetClient extends EE {
     this.queue = {}
     this.req_id = 1
     this.isServer = isServer || false
+    this.push = this.source.push.bind(this.source)
     this.addr = (isServer ? 'server' : 'client') + '->(unknown ' + (isServer ? 'client' : 'server') + ')'
     log('creating isServer=%s', this.isServer)
   }
@@ -71,7 +72,7 @@ class ZeroNetClient extends EE {
   // basics
   write (data) {
     if (this.end) return this.end
-    this.source.push(data)
+    this.push(data)
   }
   disconnect (reason) {
     if (this.end) throw new Error('Already disconnected')
@@ -117,6 +118,12 @@ class ZeroNetClient extends EE {
       return this.write(data)
     }
   }
+  // streamFile
+  streamFileRequest() {
+    let queue = []
+    this.push = data => queue.push(data)
+  }
+
 
   // handler
   sink (read) {
@@ -133,7 +140,7 @@ class ZeroNetClient extends EE {
           log('[%s/RESPONSE]: GET ID %s SUCCESS %s', this.addr, data.to, !data.error, inspect(data, 'resp'))
           const {cb, cmd} = this.queue[data.to]
           delete this.queue[data.to]
-          if (data.error) { // if the response has en error create a fancy error
+          if (data.error) { // if the response has an error create a fancy error
             const err = new Error((data.error.startsWith('Error: ') ? '' : 'Error: ') + data.error)
             err.stack = (data.error.startsWith('Error: ') ? '' : 'Error: ') + data.error +
               '\n    at PeerCmd(' + cmd + ')' +

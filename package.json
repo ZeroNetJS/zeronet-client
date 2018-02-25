@@ -33,11 +33,11 @@
   "dependencies": {
     "bl": "^1.2.1",
     "zeronet-msgpack": "^3.6.0",
-    "pull-pushable": "^2.1.2",
-    "pull-stream": "^3.6.1"
+    "pull-pushable": "^2.2.0",
+    "pull-stream": "^3.6.2"
   },
   "devDependencies": {
-    "aegir": "^12.4.0",
+    "aegir": "^13.0.5",
     "chai": "^4.1.2",
     "dirty-chai": "^2.0.1",
     "interface-connection": "^0.3.2",
