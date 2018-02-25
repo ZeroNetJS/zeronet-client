@@ -1,3 +1,13 @@
+<a name="0.3.7"></a>
+## [0.3.7](https://github.com/ZeroNetJS/zeronet-client/compare/v0.3.6...v0.3.7) (2018-02-25)
+
+
+### Bug Fixes
+
+* lint ([f592c7b](https://github.com/ZeroNetJS/zeronet-client/commit/f592c7b))
+
+
+
 <a name="0.3.6"></a>
 ## [0.3.6](https://github.com/ZeroNetJS/zeronet-client/compare/v0.3.5...v0.3.6) (2018-01-25)
 
